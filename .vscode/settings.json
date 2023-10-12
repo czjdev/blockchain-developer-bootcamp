@@ -1,4 +1,5 @@
 {
-    "commentTranslate.targetLanguage": "zh-CN",
-    "commentTranslate.source": "Bing"
+  "commentTranslate.targetLanguage": "zh-CN",
+  "commentTranslate.source": "Bing",
+  "editor.formatOnSave": false
 }
