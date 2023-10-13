@@ -24,11 +24,12 @@ contract Token {
         public
         returns (bool success)
     {
-        // deduct tokens from spender
+        require(balanceOf[msg.sender] >= _value, "Insufficient balance");
+        require(_to != address(0));
+
         balanceOf[msg.sender] -= _value;
-        // credit tokens to reciver
         balanceOf[_to] += _value;
-        // emit event
+        
         emit Transfer(msg.sender, _to, _value);
         return true;
     }
