@@ -110,4 +110,36 @@ describe("Token", () => {
       })
     })
   })
+
+  describe("Delegated Token Transfers", () => {
+    let amount, transaction, result
+    beforeEach(async () => {
+      amount = tokens(100)
+      transaction = await token.connect(deployer).approve(exchange.address, amount);
+      result = await transaction.wait()
+    })
+
+    describe("Success", async () => {
+      beforeEach(async () => {
+        transaction = await token.connect(exchange).transferFrom(deployer.address, reciver.address, amount);
+        result = await transaction.wait()
+      })
+
+      it("transfers token balances", async () => {
+        expect(await token.balanceOf(deployer.address)).to.equal(tokens(999900));
+        expect(await token.balanceOf(reciver.address)).to.equal(amount);
+      })
+
+      it("reset the allowance", async () => {
+        expect(await token.allowances(deployer.address, exchange.address)).to.equal(0)
+      })
+    })
+
+    describe("Failure", async () => {
+      it("reject insufficient amounts", async () => {
+        const invalidAmount = tokens(100000000)
+        await expect(token.connect(exchange).transferFrom(deployer.address, reciver.address, invalidAmount)).to.be.reverted
+      })
+    })
+  })
 });
