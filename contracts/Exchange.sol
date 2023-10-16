@@ -112,4 +112,13 @@ contract Exchange {
             block.timestamp
         );
     }
+
+    function fillOrder(uint256 _id) public {
+        _Order storage _order = orders[_id];
+        _trade(_order.id, _order.user, _order.tokenGet, _order.amountGet, _order.tokenGive, _order.amountGive);
+    }
+
+    function _trade(uint256 _orderId, address _user, address _tokenGet, uint256 _amountGet, address _tokenGive, uint256 _amountGive) internal {
+        
+    }
 }
