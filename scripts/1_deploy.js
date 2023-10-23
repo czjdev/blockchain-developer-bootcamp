@@ -13,19 +13,19 @@ async function main() {
     // deploy contract
     const dapp = await Token.deploy('Dapp university', 'DAPP', '1000000');
     await dapp.deployed();
-    console.log(`DAPP deployed to:${dapp.address}`);
+    console.log(`DAPP deployed to: ${dapp.address}`);
 
     const mETH = await Token.deploy('mETH', 'mETH', '1000000');
     await mETH.deployed();
-    console.log(`mETH deployed to:${mETH.address}`);
+    console.log(`mETH deployed to: ${mETH.address}`);
 
     const mDAI = await Token.deploy('mDAI', 'mDAI', '1000000');
     await mDAI.deployed();
-    console.log(`mDAI deployed to:${mDAI.address}`);
+    console.log(`mDAI deployed to: ${mDAI.address}`);
 
     const exchange = await Exchange.deploy(accounts[1].address, 10);
     await exchange.deployed();
-    console.log(`Exchange deployed to:${exchange.address}`);
+    console.log(`Exchange deployed to: ${exchange.address}`);
 }
 
 main()
