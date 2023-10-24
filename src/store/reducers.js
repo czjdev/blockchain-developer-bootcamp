@@ -21,7 +21,7 @@ export const provider = (state = {}, action) => {
     }
 }
 
-export const tokens = (state = { loadeda: false, contract: null }, action) => {
+export const tokens = (state = { loaded: false, contract: null }, action) => {
     switch (action.type) {
         case 'TOKEN_LOADED':
             return {

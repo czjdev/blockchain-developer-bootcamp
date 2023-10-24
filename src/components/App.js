@@ -1,22 +1,20 @@
 import { useEffect } from 'react';
-import config from '../config.json';
 import { useDispatch } from 'react-redux';
+import config from '../config.json';
 import { loadProvider, loadNetwork, loadAccount, loadToken } from '../store/interactions';
 
 function App() {
   const dispatch = useDispatch();
 
   const loadBlockchainData = async () => {
-    const account = await loadAccount(dispatch);
-    console.log(account);
+    await loadAccount(dispatch);
 
     // connnect to blockchain
     const provider = loadProvider(dispatch);
     const chainId = await loadNetwork(provider, dispatch);
 
     // token smart contract
-    const token = await loadToken(provider, config[chainId].DApp.address, dispatch);
-    console.log(token);
+    await loadToken(provider, config[chainId].DApp.address, dispatch);
   }
 
   useEffect(() => {
