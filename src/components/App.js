@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import config from '../config.json';
-import { loadProvider, loadNetwork, loadAccount, loadTokens, loadExchange } from '../store/interactions';
+import { loadProvider, loadNetwork, loadAccount, loadTokens, loadExchange, subscribeToEvents } from '../store/interactions';
 import Navbar from './Navbar';
 import Markets from './Markets';
 import Balance from './Balance';
@@ -21,11 +21,10 @@ function App() {
       window.location.reaload()
     })
 
-    // fetch current account & balance from metamask when changed
+    // Fetch current account & balance from Metamask when changed
     window.ethereum.on('accountsChanged', () => {
       loadAccount(provider, dispatch)
     })
-    // await loadAccount(provider, dispatch);
 
     // load token smart contract
     const DApp = config[chainId].DApp;
@@ -34,7 +33,10 @@ function App() {
 
     // load exchange smart contract
     const exchangeConfig = config[chainId].exchange;
-    await loadExchange(provider, exchangeConfig.address, dispatch);
+    const exchange = await loadExchange(provider, exchangeConfig.address, dispatch);
+
+    // listen to events
+    subscribeToEvents(exchange, dispatch)
   }
 
   useEffect(() => {
