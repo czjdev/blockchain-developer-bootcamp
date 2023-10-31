@@ -112,6 +112,9 @@ export const makeBuyOrder = async (provider, exchange, tokens, order, dispatch) 
   const tokenGive = tokens[1].address
   const amountGive = ethers.utils.parseUnits((order.amount * order.price).toString(), 18)
 
+  // price = token1Amount/token0Amount
+  // token1Amount = token0Amount * price
+
   dispatch({ type: 'NEW_ORDER_REQUEST' })
 
   try {
@@ -138,4 +141,29 @@ export const makeSellOrder = async (provider, exchange, tokens, order, dispatch)
   } catch (error) {
     dispatch({ type: 'NEW_ORDER_FAIL' })
   }
+}
+
+// ------------------------------------------------------------------------------
+// LOAD ALL ORDERS
+
+export const loadAllOrders = async (provider, exchange, dispatch) => {
+  const block = await provider.getBlockNumber()
+
+  // Fetch canceled orders
+  const cancelStream = await exchange.queryFilter('Cancel', 0, block)
+  const cancelledOrders = cancelStream.map(event => event.args)
+
+  dispatch({ type: 'CANCELLED_ORDERS_LOADED', cancelledOrders })
+
+  // Fetch filled orders
+  const tradeStream = await exchange.queryFilter('Trade', 0, block)
+  const filledOrders = tradeStream.map(event => event.args)
+
+  dispatch({ type: 'FILLED_ORDERS_LOADED', filledOrders })
+
+  // Fetch all orders
+  const orderStream = await exchange.queryFilter('Order', 0, block)
+  const allOrders = orderStream.map(event => event.args)
+
+  dispatch({ type: 'ALL_ORDERS_LOADED', allOrders })
 }

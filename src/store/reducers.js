@@ -85,6 +85,10 @@ const DEFAULT_EXCHANGE_STATE = {
     allOrders: {
         loaded: false,
         data: []
+    },
+    cancelledOrders: {
+        loaded: false,
+        data: []
     }
 }
 
@@ -98,17 +102,48 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                 loaded: true,
                 contract: action.exchange
             }
+
+        // ------------------------------------------------------------------------------
+        // ORDERS LOADED (CANCELLED, FILLED & ALL)
+
+        case 'CANCELLED_ORDERS_LOADED':
+            return {
+            ...state,
+            cancelledOrders: {
+                    loaded: true,
+                    data: action.cancelledOrders
+                }
+            }
+    
+        case 'FILLED_ORDERS_LOADED':
+            return {
+            ...state,
+            filledOrders: {
+                    loaded: true,
+                    data: action.filledOrders
+                }
+            }
+    
+        case 'ALL_ORDERS_LOADED':
+            return {
+            ...state,
+            allOrders: {
+                    loaded: true,
+                    data: action.allOrders
+                }
+            }    
+        
         // ------------------------------------------------------------------------------
         // BALANCE CASES
         case 'EXCHANGE_TOKEN_1_BALANCE_LOADED':
             return {
-            ...state,
-            balances: [action.balance]
+                ...state,
+                balances: [action.balance]
             }
         case 'EXCHANGE_TOKEN_2_BALANCE_LOADED':
             return {
-            ...state,
-            balances: [...state.balances, action.balance]
+                ...state,
+                balances: [...state.balances, action.balance]
             }
         // ------------------------------------------------------------------------------
         // TRANSFER CASES (DEPOSIT & WITHDRAWS)
